@@ -1,0 +1,87 @@
+--SQL Scripts for Creating Tables & Functions
+
+--Artist
+CREATE TABLE Artist (
+artist_id INTEGER NOT NULL IDENTITY,
+artist_name VARCHAR(50) NOT NULL,
+phone VARCHAR(20) NOT NULL, 
+email VARCHAR(30),
+requirements VARCHAR(200), 
+CONSTRAINT PK_Artist PRIMARY KEY(artist_id),
+CONSTRAINT CHK_Artist_emailCheck CHECK(email LIKE '%_@_%._%')
+);
+
+--Venue
+CREATE TABLE Venue (
+venue_id INTEGER NOT NULL IDENTITY,
+venue_name VARCHAR(20) NOT NULL,
+capacity INTEGER NOT NULL,
+CONSTRAINT PK_Venue PRIMARY KEY(venue_id),
+CONSTRAINT UQ_Venue_venue_name UNIQUE(venue_name)
+);
+
+--Event
+CREATE TABLE Event (
+event_name VARCHAR(50) NOT NULL,
+event_date DATE NOT NULL,
+event_time TIME NOT NULL,
+venue_id INTEGER NOT NULL,
+price INTEGER NOT NULL,
+event_status VARCHAR(10) NOT NULL,
+event_type VARCHAR(10) NOT NULL,
+CONSTRAINT PK_Event PRIMARY KEY(event_name, event_date),
+CONSTRAINT FK_Event_Venue FOREIGN KEY(venue_id) REFERENCES Venue(venue_id),
+CONSTRAINT CHK_Event_statusCheck CHECK(event_status IN ('planned', 'cancelled')),
+CONSTRAINT CHK_Event_eventType CHECK(event_type IN ('theatre', 'dance', 'concert', 'other'))
+);
+
+--Performer
+CREATE TABLE Performer (
+performer_id INTEGER NOT NULL IDENTITY,
+event_name VARCHAR(50) NOT NULL,
+event_date DATE NOT NULL,
+artist_id INTEGER NOT NULL,
+CONSTRAINT PK_Performer PRIMARY KEY (performer_id),
+CONSTRAINT FK_Performer_Artist FOREIGN KEY(artist_id) REFERENCES Artist(artist_id),
+CONSTRAINT FK_Performer_Event FOREIGN KEY(event_name, event_date) REFERENCES Event(event_name, event_date)
+);
+
+--Booking
+CREATE TABLE Booking (
+booking_number INTEGER NOT NULL IDENTITY,
+booking_date DATE NOT NULL, 
+event_name VARCHAR(50) NOT NULL,
+event_date DATE NOT NULL,
+booking_memo VARCHAR(100),
+ticket_quantity INTEGER NOT NULL,
+payment_status VARCHAR(10) NOT NULL,
+CONSTRAINT PK_Booking PRIMARY KEY (booking_number),
+CONSTRAINT FK_Booking_Event FOREIGN KEY(event_name, event_date) REFERENCES Event(event_name, event_date),
+CONSTRAINT CHK_Booking_amountCheck CHECK(ticket_quantity> 0),
+CONSTRAINT CHK_Booking_statusCheck CHECK(payment_status IN ('sold', 'reserved', 'refunded'))
+);
+
+ 
+--Create Function Statements (used to create user defined functions to use in Booking Check Constraint)
+CREATE FUNCTION VenueCapacity()
+RETURNS INTEGER
+AS
+BEGIN
+ DECLARE @cap INTEGER
+ SELECT @cap = capacity FROM Venue 
+ RETURN @cap
+END;
+
+CREATE FUNCTION TotalBooked()
+RETURNS INTEGER
+AS
+BEGIN
+ DECLARE @booked INTEGER
+ SELECT @booked = sum(ticket_quantity) FROM Booking GROUP BY event_name, event_date
+ RETURN @booked
+END;
+
+
+--Booking Check Constraint (used for limiting total ticket sales to the venue capacity)
+ALTER TABLE Booking
+ADD CONSTRAINT capacityCheck CHECK(BIT_SWD03_07.VenueCapacity() >= BIT_SWD03_07.TotalBooked());
