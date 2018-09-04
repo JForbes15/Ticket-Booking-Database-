@@ -1,0 +1,9 @@
+--SQL Scripts for Creating Indexes
+
+CREATE INDEX ix_FK_event_name_event_date ON Performer(event_name, event_date);
+
+CREATE INDEX ix_FK_artist_id ON Performer(artist_id);
+
+CREATE INDEX ix_FK_venue_id ON Event(venue_id);
+
+CREATE INDEX ix_FK_event_name_event_date ON Booking(event_name, event_date);
