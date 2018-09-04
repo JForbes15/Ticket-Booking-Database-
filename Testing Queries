@@ -1,0 +1,75 @@
+--SQL Scripts for User Transactions & Queries
+
+--User Transaction Statements
+--1)
+INSERT INTO Booking (booking_date, event_name, event_date, booking_memo, 
+ticket_quantity, payment_status)
+VALUES ('2018-05-14', 'Finnish Summer', '2018.06.30', 'phone number : +358987654321', 1, 'reserved'); 
+
+--2)	
+DELETE FROM Booking
+WHERE booking_number = 3;
+
+--3)	
+UPDATE Booking
+SET ticket_quantity = 5 
+WHERE booking_number = 4;
+
+--4)	
+UPDATE Booking 
+SET payment_status = 'sold'
+WHERE booking_number = 4;
+
+--5)	
+DELETE FROM Booking
+WHERE payment_status = 'reserved' AND DATEDIFF(DAY, booking_date, GETDATE()) > 3;
+--6)	
+DELETE FROM Booking
+WHERE payment_status = 'reserved' AND event_date < GETDATE();
+
+--7)	
+UPDATE Event
+SET event_status = 'cancelled'
+WHERE event_name = 'Kuru Festival' AND event_date = '2018.07.15';
+
+--8)	
+UPDATE Booking 
+SET payment_status = 'refunded'
+WHERE booking_number = '1';
+
+
+--Queries
+--1)
+SELECT event_name AS 'Events Next Month' FROM Event 
+WHERE DATENAME( MONTH, event_date) = 'June';
+
+--2) 
+SELECT event_name AS 'Upcoming Theatre Events in May' FROM Event 
+WHERE event_type = 'theatre' AND DATENAME( MONTH, event_date) = 'May' 
+AND event_status <> 'cancelled' AND event_date > GETDATE();
+
+--3)
+SELECT phone AS "Adele's Phone Number" FROM Artist 
+WHERE artist_name = 'Adele';
+
+--4)
+SELECT event_date, requirements FROM Performer 
+JOIN Artist ON (Artist.artist_id = Performer.artist_id)
+WHERE Artist.artist_name = 'Saara Aalto';
+
+--5)
+SELECT SUM(ticket_quantity) AS 'Number of Tickets Sold' FROM Booking 
+WHERE event_name = 'Finnish Summer'AND event_date = '2018.06.30'AND payment_status = 'sold';
+
+--6)
+SELECT capacity - SUM(ticket_quantity) AS 'Number of Tickets Remaining' FROM Venue 
+JOIN Event ON (Event.venue_id = Venue.venue_id) 
+JOIN Booking ON (Booking.event_name = Event.event_name)
+WHERE Booking.event_name = 'ZZ Top Live' AND Event.event_date = '2018.12.10'
+GROUP BY Event.event_name, Event.event_date, capacity ;
+
+--7)
+SELECT (SUM(ticket_quantity) * price) AS 'Total Money From Sold Tickets 2018' FROM Booking 
+JOIN Event ON (Event.event_name = Booking.event_name)
+WHERE payment_status = 'sold' AND DATENAME( YEAR, booking_date) = 2018
+GROUP BY payment_status, price;
