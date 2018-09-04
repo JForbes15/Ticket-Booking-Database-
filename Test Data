@@ -1,0 +1,101 @@
+--SQL Script for Populating Database
+
+--Artist Test Data
+INSERT INTO Artist (artist_name, phone, email, requirements)
+VALUES ('Adele', '+44123456678', 'adele@hotmail.com', 'intolerance to gluten');
+
+INSERT INTO Artist (artist_name, phone, email)
+VALUES ('Finnish National Theatre Company', '+3585555555', 'finnishntc@hotmail.com')
+
+INSERT INTO Artist (artist_name, phone)
+VALUES ('Kuru Amateur Dramatics Society', '+35877777775');
+
+INSERT INTO Artist (artist_name, phone, email)
+VALUES ('Jorma Uotinen', '+35856789', 'Jorma@hotmail.com');
+
+INSERT INTO Artist (artist_name, phone, email)
+VALUES ('Saara Aalto', '+358123456678', 'saaraa@hotmail.com');
+
+INSERT INTO Artist (artist_name, phone, email, requirements)
+VALUES ('Drake', '+0123456678', 'drake@hotmail.com', 'allergic to dairy');
+
+INSERT INTO Artist (artist_name, phone, email)
+VALUES ('ZZ Top', '+01234566789', 'zz@hotmail.com');
+
+-- Venue Test Data 
+INSERT INTO Venue (venue_name, capacity)
+VALUES ('small room', 70);
+
+INSERT INTO Venue (venue_name, capacity)
+VALUES ('large room', 3500);
+
+--Event Test Data 
+INSERT INTO Event (event_name, event_date, event_time, venue_id, price, event_status, event_type)
+VALUES ('Adele Live', '2018.04.15', '19:00', 2, 70, 'planned', 'concert');
+
+INSERT INTO Event (event_name, event_date, event_time, venue_id, price, event_status, event_type)
+VALUES ('Miss Saigon', '2018.05.16', '19:00', 2, 50, 'planned', 'theatre');
+
+INSERT INTO Event (event_name, event_date, event_time, venue_id, price, event_status, event_type)
+VALUES ('HMS Pinafore', '2018.05.22', '19:00', 1, 20, 'planned', 'theatre');
+
+INSERT INTO Event (event_name, event_date, event_time, venue_id, price, event_status, event_type)
+VALUES ('Finnish Summer', '2018.06.30', '16:00', 2, 30, 'planned', 'dance');
+
+INSERT INTO Event (event_name, event_date, event_time, venue_id, price, event_status, event_type)
+VALUES ('Kuru Festival', '2018.07.15', '19:00', 2, 50, 'planned', 'concert');
+
+INSERT INTO Event (event_name, event_date, event_time, venue_id, price, event_status, event_type)
+VALUES ('ZZ Top Live', '2018.12.10', '19:30', 2, 40, 'planned', 'concert');
+
+--Performers Test Data
+INSERT INTO Performer (event_name, event_date, artist_id)
+VALUES ('Adele Live', '2018.04.15', '1');
+
+INSERT INTO Performer (event_name, event_date, artist_id)
+VALUES ('Miss saigon', '2018.05.16', '2');
+
+INSERT INTO Performer (event_name, event_date, artist_id)
+VALUES ('HMS Pinafore', '2018.05.22', '3');
+
+INSERT INTO Performer (event_name, event_date, artist_id)
+VALUES ('Finnish Summer', '2018.06.30', '4');
+
+INSERT INTO Performer (event_name, event_date, artist_id)
+VALUES ('Kuru Festival', '2018.07.15', '5')
+
+INSERT INTO Performer (event_name, event_date, artist_id)
+VALUES ('Kuru Festival', '2018.07.15', '6');
+
+INSERT INTO Performer (event_name, event_date, artist_id)
+VALUES ('ZZ Top Live', '2018.12.10', '7');
+
+
+--Booking Test Data
+INSERT INTO Booking (booking_date, event_name, event_date, booking_memo, 
+ticket_quantity, payment_status)
+VALUES ('2018-01-15', 'Adele Live', '2018.04.15', 'phone number : + 35812121212', 5, 'reserved');
+
+INSERT INTO Booking (booking_date, event_name, event_date, booking_memo, 
+ticket_quantity, payment_status)
+VALUES ('2018-01-14', 'Adele Live', '2018.04.15', 'phone number : +3581414141414', 3, 'sold');
+
+INSERT INTO Booking (booking_date, event_name, event_date, booking_memo, 
+ticket_quantity, payment_status)
+VALUES ('2018-05-12', 'Finnish Summer', '2018.06.30', 'phone number : +358131313131', 4, 'reserved');
+
+INSERT INTO Booking (booking_date, event_name, event_date, booking_memo, 
+ticket_quantity, payment_status)
+VALUES ('2018-05-14', 'Finnish Summer', '2018.06.30', 'phone number : +35812345678', 2, 'reserved');
+
+INSERT INTO Booking (booking_date, event_name, event_date, booking_memo, 
+ticket_quantity, payment_status)
+VALUES ('2018-05-10', 'Finnish Summer', '2018.06.30', 'phone number : + 35800000000', 4, 'sold');
+
+INSERT INTO Booking (booking_date, event_name, event_date, booking_memo, 
+ticket_quantity, payment_status)
+VALUES ('2018-05-10', 'Kuru festival', '2018.07.15', 'phone number : + 35874747474', 8, 'reserved');
+
+INSERT INTO Booking (booking_date, event_name, event_date, booking_memo, 
+ticket_quantity, payment_status)
+VALUES ('2018-05-10', 'ZZ Top Live', '2018.12.10', 'phone number : + 3581234', 10, 'reserved');
